@@ -91,9 +91,7 @@ def generalSearch(problem, function, heuristic=nullHeuristic):
     closed = set()
     fringe = util.PriorityQueue()
     fringe.push(Node(problem.getStartState()), 0)
-    while True:
-        if fringe.isEmpty():
-            return []
+    while not fringe.isEmpty():
         node = fringe.pop()
         if problem.isGoalState(node.state):
             return node.path
@@ -103,7 +101,7 @@ def generalSearch(problem, function, heuristic=nullHeuristic):
                 successor_priority = function(node.priority, successor[2])
                 successor_node = Node(successor[0], node.path + [successor[1]], successor_priority)
                 fringe.push(successor_node, successor_priority + heuristic(successor[0], problem))
-
+    return list() # The search has failed
 
 def depthFirstSearch(problem):
     """
