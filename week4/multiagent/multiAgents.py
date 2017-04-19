@@ -86,7 +86,7 @@ class ReflexAgent(Agent):
         nearestFoodDistance = 1000
         for foodPos in newFood.asList():
             #nearestFoodDistance = min(nearestFoodDistance, mazeDistance(foodPos, newPos, successorGameState))
-            nearestFoodDistance = min(nearestFoodDistance, manhattanDistance(foodPos, newPos)) 
+            nearestFoodDistance = min(nearestFoodDistance, manhattanDistance(foodPos, newPos))
         return successorGameState.getScore() - 5.0 / (nearestGhostDistance + 1.0) - nearestFoodDistance / 2.0
 
 def scoreEvaluationFunction(currentGameState):
@@ -119,6 +119,11 @@ class MultiAgentSearchAgent(Agent):
         self.evaluationFunction = util.lookup(evalFn, globals())
         self.depth = int(depth)
 
+class ScoreAction:
+    def __init__(self, score, action):
+        self.score = score
+        self.action = action
+
 class MinimaxAgent(MultiAgentSearchAgent):
     """
       Your minimax agent (question 2)
@@ -147,8 +152,34 @@ class MinimaxAgent(MultiAgentSearchAgent):
           gameState.isLose():
             Returns whether or not the game state is a losing state
         """
-        "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
+
+        return self.minimaxSearch(gameState, agentIndex = 0, depth = self.depth).action
+
+    def minimaxSearch(self, gameState, agentIndex, depth):
+        if depth == 0 or gameState.isLose() or gameState.isWin():
+            return ScoreAction(self.evaluationFunction(gameState), Directions.STOP)
+        else:
+            legalActions = gameState.getLegalActions(agentIndex)
+            #print(depth, agentIndex, legalActions, gameState.getNumAgents())
+            successorGameStates = [gameState.generateSuccessor(agentIndex, legalAction) for legalAction in legalActions]
+            if self.lastAgent(gameState, agentIndex):
+                scores = [self.minimaxSearch(successorGameState, 0, depth - 1).score for successorGameState in successorGameStates]
+            else:
+                scores = [self.minimaxSearch(successorGameState, agentIndex + 1, depth).score for successorGameState in successorGameStates]
+
+            judgeFunction = max if agentIndex == 0 else min
+            if len(scores) == 0:
+                if judgeFunction == max:
+                    return ScoreAction(float('-inf'), Directions.STOP)
+                else:
+                    return ScoreAction(float('inf'), Directions.STOP)
+            bestScore = judgeFunction(scores)
+            bestIndices = [index for index in range(len(scores)) if scores[index] == bestScore]
+            chosenIndex = random.choice(bestIndices) # Pick randomly among the best
+            return ScoreAction(bestScore, legalActions[chosenIndex])
+
+    def lastAgent(self, gameState, agentIndex):
+        return agentIndex == gameState.getNumAgents() - 1
 
 class AlphaBetaAgent(MultiAgentSearchAgent):
     """
