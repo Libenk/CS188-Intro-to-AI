@@ -86,7 +86,7 @@ class ReflexAgent(Agent):
         nearestFoodDistance = 1000
         for foodPos in newFood.asList():
             #nearestFoodDistance = min(nearestFoodDistance, mazeDistance(foodPos, newPos, successorGameState))
-            nearestFoodDistance = min(nearestFoodDistance, manhattanDistance(foodPos, newPos))
+            nearestFoodDistance = min(nearestFoodDistance, manhattanDistance(foodPos, newPos)) 
         return successorGameState.getScore() - 5.0 / (nearestGhostDistance + 1.0) - nearestFoodDistance / 2.0
 
 def scoreEvaluationFunction(currentGameState):
