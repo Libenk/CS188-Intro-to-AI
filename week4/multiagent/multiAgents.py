@@ -328,7 +328,9 @@ def betterEvaluationFunction(currentGameState):
       Your extreme ghost-hunting, pellet-nabbing, food-gobbling, unstoppable
       evaluation function (question 5).
 
-      DESCRIPTION: <write something here so we know what you did>
+      DESCRIPTION: There are four components contributing to the evaulation result.
+      current score, left food and position, ghost position, capsule postion
+
     """
     "*** YOUR CODE HERE ***"
     newPos = currentGameState.getPacmanPosition()
@@ -359,7 +361,7 @@ def betterEvaluationFunction(currentGameState):
         nearestFoodDistance = min(nearestFoodDistance, distance)
     averageDistance = averageDistance / float(len(newFood.asList()) + 0.1)
     score_factor = currentGameState.getScore()
-    food_factor = -(0.9 * nearestFoodDistance + 0.1 * averageDistance) / 2.0
+    food_factor = -(0.9 * nearestFoodDistance + 0.1 * averageDistance) / 2.0 - len(newFood.asList())
     ghost_factor =  -5.0 / (nearestGhostDistance + 1.0)
     capsule_factor = - 50.0 * len(currentGameState.getCapsules()) + 0.1* sum(newScaredTimes)
 
