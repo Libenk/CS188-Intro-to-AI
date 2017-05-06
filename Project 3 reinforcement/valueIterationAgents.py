@@ -147,9 +147,9 @@ class AsynchronousValueIterationAgent(ValueIterationAgent):
 
     def runValueIteration(self):
         "*** YOUR CODE HERE ***"
-        import random
+        numStates = len(self.mdp.getStates())
         for k in range(self.iterations):
-            currentState = random.choice(self.mdp.getStates())
+            currentState = self.mdp.getStates()[k % numStates]
             if self.mdp.isTerminal(currentState):
                 continue
             for action in self.mdp.getPossibleActions(currentState):
