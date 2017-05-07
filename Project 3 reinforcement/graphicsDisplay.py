@@ -4,7 +4,7 @@
 # educational purposes provided that (1) you do not distribute or publish
 # solutions, (2) you retain this notice, and (3) you provide clear
 # attribution to UC Berkeley, including a link to http://ai.berkeley.edu.
-# 
+#
 # Attribution Information: The Pacman AI projects were developed at UC Berkeley.
 # The core projects and autograders were primarily created by John DeNero
 # (denero@cs.berkeley.edu) and Dan Klein (klein@cs.berkeley.edu).
@@ -39,6 +39,7 @@ GHOST_COLORS.append(formatColor(.98,.41,.07)) # Orange
 GHOST_COLORS.append(formatColor(.1,.75,.7)) # Green
 GHOST_COLORS.append(formatColor(1.0,0.6,0.0)) # Yellow
 GHOST_COLORS.append(formatColor(.4,0.13,0.91)) # Purple
+
 
 TEAM_COLORS = GHOST_COLORS[:2]
 
@@ -330,7 +331,7 @@ class PacmanGraphics:
         if ghost.scaredTimer > 0:
             return SCARED_COLOR
         else:
-            return GHOST_COLORS[ghostIndex]
+            return GHOST_COLORS[ghostIndex % 6]
 
     def drawGhost(self, ghost, agentIndex):
         pos = self.getPosition(ghost)
@@ -397,7 +398,7 @@ class PacmanGraphics:
         if ghost.scaredTimer > 0:
             color = SCARED_COLOR
         else:
-            color = GHOST_COLORS[ghostIndex]
+            color = GHOST_COLORS[ghostIndex % 6]
         edit(ghostImageParts[0], ('fill', color), ('outline', color))
         self.moveEyes(self.getPosition(ghost), self.getDirection(ghost), ghostImageParts[-4:])
         refresh()
@@ -646,7 +647,7 @@ class FirstPersonPacmanGraphics(PacmanGraphics):
                     self.currentGhostImages[i] = None
 
     def getGhostColor(self, ghost, ghostIndex):
-        return GHOST_COLORS[ghostIndex]
+        return GHOST_COLORS[ghostIndex % 6]
 
     def getPosition(self, ghostState):
         if not self.showGhosts and not ghostState.isPacman and ghostState.getPosition()[1] > 1:
