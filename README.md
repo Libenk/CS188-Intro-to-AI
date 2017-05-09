@@ -8,7 +8,7 @@ Here are some demos of the Pacman Game Project results:
 
 ![](http://imgur.com/hp754IO.gif)
 
-### Reinforcement Learning Pacman
+### Feature Based QLearning Pacman
 
 ![](http://i.imgur.com/uCOstgV.gif)
 
