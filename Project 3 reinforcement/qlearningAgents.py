@@ -79,9 +79,11 @@ class QLearningAgent(ReinforcementAgent):
         if not legalActions:
             return None
         bestValues = self.getValue(state)
+        bestActions = list()
         for action in legalActions:
             if self.getQValue(state, action) == bestValues:
-                return action
+                bestActions.append(action)
+        return random.choice(bestActions)
 
     def getAction(self, state):
         """
@@ -130,7 +132,7 @@ class QLearningAgent(ReinforcementAgent):
 class PacmanQAgent(QLearningAgent):
     "Exactly the same as QLearningAgent, but with different default parameters"
 
-    def __init__(self, epsilon=0.05,gamma=0.8,alpha=0.2, numTraining=0, **args):
+    def __init__(self, epsilon=0.1,gamma=0.8,alpha=0.2, numTraining=0, **args):
         """
         These default parameters can be changed from the pacman.py command line.
         For example, to change the exploration rate, try:
@@ -205,6 +207,7 @@ class ApproximateQAgent(PacmanQAgent):
         PacmanQAgent.final(self, state)
 
         # did we finish training?
-        if self.episodesSoFar % 100 == 0: #== self.numTraining:
+        if self.episodesSoFar % 25 == 0: #== self.numTraining:
             # you might want to print your weights here for debugging
+            print("Number of episode: {}".format(self.episodesSoFar))
             print(self.getWeights())

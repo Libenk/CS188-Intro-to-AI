@@ -163,13 +163,13 @@ class CustomedExtractor(FeatureExtractor):
             features["eats-food"] = 1.0
 
 
-        if capsules and (next_x, next_y) in capsules:
+        if capsules and (next_x, next_y) in capsules and features["average-scared-timer"] == 0:
             features["eats-capsules"] = 10.0
 
         if (next_x, next_y) in ghosts:
             ghostIndex = ghosts.index((next_x, next_y))
             if ghostsStates[ghostIndex].scaredTimer > 0:
-                features["eats-ghosts"] = 2.0
+                features["eats-ghosts"] = 10.0
 
 
 

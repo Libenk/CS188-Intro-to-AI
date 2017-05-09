@@ -259,9 +259,9 @@ class GameState:
 # You shouldn't need to look through the code in this section of the file. #
 ############################################################################
 
-SCARED_TIME = 40    # Moves ghosts are scared
+SCARED_TIME = 20    # Moves ghosts are scared
 COLLISION_TOLERANCE = 0.7 # How close ghosts must be to Pacman to kill
-TIME_PENALTY = 1 # Number of points lost each round
+TIME_PENALTY = 2 # Number of points lost each round
 
 class ClassicGameRules:
     """
@@ -435,14 +435,14 @@ class GhostRules:
 
     def collide( state, ghostState, agentIndex):
         if ghostState.scaredTimer > 0:
-            state.data.scoreChange += 200
+            state.data.scoreChange += 20
             GhostRules.placeGhost(state, ghostState)
             ghostState.scaredTimer = 0
             # Added for first-person
             state.data._eaten[agentIndex] = True
         else:
             if not state.data._win:
-                state.data.scoreChange -= 500
+                state.data.scoreChange -= 1000
                 state.data._lose = True
     collide = staticmethod( collide )
 
