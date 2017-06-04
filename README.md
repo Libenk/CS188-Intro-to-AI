@@ -15,3 +15,17 @@ Here are some demos of the Pacman Game Project results:
 ### Pacman Struggling in Hell 
 
 ![](http://i.imgur.com/MNprOF3.gif)
+
+### Robot learning to crawl
+
+#### Before learning
+
+![](http://imgur.com/ZWbWv59.gif)
+
+#### During learning
+
+![](http://i.imgur.com/5esUxTq.gif)
+
+#### After learning
+
+![](http://i.imgur.com/0rMuVj5.gif)
