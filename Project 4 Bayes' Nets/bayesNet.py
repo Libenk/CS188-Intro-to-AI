@@ -4,7 +4,7 @@
 # educational purposes provided that (1) you do not distribute or publish
 # solutions, (2) you retain this notice, and (3) you provide clear
 # attribution to UC Berkeley, including a link to http://ai.berkeley.edu.
-# 
+#
 # Attribution Information: The Pacman AI projects were developed at UC Berkeley.
 # The core projects and autograders were primarily created by John DeNero
 # (denero@cs.berkeley.edu) and Dan Klein (klein@cs.berkeley.edu).
@@ -27,10 +27,10 @@ class BayesNet(object):
         variables:       An iterable of all of the variables.
         inEdges:         A dict that maps variable to otherVariable
                          when there is an edge from otherVariable to
-                         variable 
+                         variable
         outEdges:        A dict that maps variable to otherVariable
                          where there is an edge from variable to
-                         otherVariable  
+                         otherVariable
         variableDomains: A dict mapping each variable to its domain (list like).
 
         Constructs a bayes net with edges given by inEdges and
@@ -41,7 +41,7 @@ class BayesNet(object):
         self.__variablesSet = set(variables)
         self.__variables = sorted(list(variables))
         # self.__inEdges[v] = [u if the edge (u, v) exists]
-        self.__inEdges  = inputInEdges 
+        self.__inEdges  = inputInEdges
         # self.__outEdges[u] = [v if the edge (u, v) exists]
         self.__outEdges = inputOutEdges
 
@@ -73,7 +73,7 @@ class BayesNet(object):
 
     def __str__(self):
         """
-        Human-readable representation of a bayes net. 
+        Human-readable representation of a bayes net.
         Prints each variable, each edge, and then each conditional probability table.
         """
         netString = "Variables: " + ", ".join([str(var) for var in self.__variablesSet]) + "\n" + \
@@ -136,7 +136,7 @@ class BayesNet(object):
         Sets the conditional probability table in the bayes net for
         variable.
 
-        CPT is a Factor of the conditional probability table with variable 
+        CPT is a Factor of the conditional probability table with variable
         as the only unconditioned variable, and each conditioned variable
         must have an edge going into variable.
         """
@@ -153,9 +153,9 @@ class BayesNet(object):
 
 
             unconditionedVariable = list(unconditionedVariables)[0]
-            
+
             if unconditionedVariable != variable:
-                raise ValueError, ("Variable in the input and the " 
+                raise ValueError, ("Variable in the input and the "
                                   + "unconditionedVariable in the factor must \nagree. " +
                                   "Input variable: " + str(variable) + \
                                   " unconditioned variable: " + str(unconditionedVariable))
@@ -191,7 +191,7 @@ class BayesNet(object):
         would be returned from getCPT.
 
         Input evidenceDict is optional.
-        If it is not provided, the CPTs for all variables without 
+        If it is not provided, the CPTs for all variables without
         specializing the domains is provided.
         """
         if evidenceDict is None or len(evidenceDict.items()) == 0:
@@ -207,7 +207,7 @@ class BayesNet(object):
         account evidence) for all variables in the bayes net.
 
         Input evidenceDict is optional.
-        If it is not provided, the CPTs for all variables without 
+        If it is not provided, the CPTs for all variables without
         specializing the domains is provided.
         """
         return [self.getCPTWithEvidence(var, evidenceDict) for var in self.__variablesSet]
@@ -229,15 +229,15 @@ class Factor(object):
         """
         Constructor for factors.
 
-        Takes in as input an iterable unconditionedVariables, an iterable 
-        conditionedVariables, and a variableDomainsDict as a mapping from 
+        Takes in as input an iterable unconditionedVariables, an iterable
+        conditionedVariables, and a variableDomainsDict as a mapping from
         variables to domains.
 
         inputUnconditionedVariables is an iterable of variables (represented as strings)
-            that contains the variables that are unconditioned in this factor 
+            that contains the variables that are unconditioned in this factor
         inputConditionedVariables is an iterable of variables (represented as strings)
-            that contains the variables that are conditioned in this factor 
-        inputVariableDomainsDict is a dictionary from variables to domains of those 
+            that contains the variables that are conditioned in this factor
+        inputVariableDomainsDict is a dictionary from variables to domains of those
             variables (typically represented as a list but could be any iterable)
 
         Initializes the probability entries of all possible assignmentDicts to be 0.0
@@ -299,7 +299,7 @@ class Factor(object):
 
         Makes sure the unconditionedVariables,
         conditionedVariables of the two factors are the same.
-        Then makes sure each table in the first is the same 
+        Then makes sure each table in the first is the same
         (up to some tolerance) as the ones in the second and vice versa.
         Returns true if they are the same.
         """
@@ -334,18 +334,18 @@ class Factor(object):
         return not self.__eq__(other)
 
     def getProbability(self, assignmentDict):
-        """ 
+        """
         Retrieval function for probability values in the factor.
 
         Input assignmentDict should be of the form {variable : variableValue} for all
         variables in the factor.
 
-        assignmentDict can have more variables than the factor contains 
-        (for instance, it could have an assignment for all the 
-        variables in a bayes net), and it will select the right row 
-        from this factor, ignoring the variables not contained within. 
+        assignmentDict can have more variables than the factor contains
+        (for instance, it could have an assignment for all the
+        variables in a bayes net), and it will select the right row
+        from this factor, ignoring the variables not contained within.
 
-        Returns the probability entry stored in the factor for that 
+        Returns the probability entry stored in the factor for that
         combination of variable assignments.
         """
         assignmentsInOrder = self.__getAssignmentsInOrder(assignmentDict)
@@ -356,22 +356,22 @@ class Factor(object):
             return self.__probDict[assignmentsInOrder]
 
     def setProbability(self, assignmentDict, probability):
-        """ 
+        """
         Setting function for probability values in the factor.
 
-        Input assignmentDict should be of the form {variable : variableValue} 
+        Input assignmentDict should be of the form {variable : variableValue}
         for all variables in the factor.
-        assignmentDict can have more variables than the factor contains 
+        assignmentDict can have more variables than the factor contains
         (for instance, it could have an assignment for all the variables in a bayes net),
-        and it will select the right row from this factor, ignoring the variables 
-        not contained within. 
+        and it will select the right row from this factor, ignoring the variables
+        not contained within.
 
         Input probability is the probability that will be set within the table.
         It must be non-negative.
 
         Returns None
         """
-        if probability < 0: 
+        if probability < 0:
             raise ValueError, ("Probabilty entries can't be set to negative values: " + \
                                str(probability))
         else:
@@ -390,7 +390,7 @@ class Factor(object):
 
         We would like to store a probability value for each
         assignmentDict, but dicts aren't hashable since they're
-        mutable, so we can't have a dict with dicts as keys.  
+        mutable, so we can't have a dict with dicts as keys.
         So we store the probability table in a dict where the keys are
         tuples of variable values, without the variable name
         associated with the value.
@@ -413,7 +413,7 @@ class Factor(object):
 
     def getAllPossibleAssignmentDicts(self):
         """
-        Use this function to get the assignmentDict for each 
+        Use this function to get the assignmentDict for each
         possible assignment for the combination of variables contained
         in the factor.
 
@@ -447,10 +447,10 @@ class Factor(object):
         returnString += ")\n\n"
 
         # first line of table with variable names
-        varLine = " | " + " | ".join([str(unconditionedVariable)[:printSizeDict[unconditionedVariable]].center(printSizeDict[unconditionedVariable], ' ') 
+        varLine = " | " + " | ".join([str(unconditionedVariable)[:printSizeDict[unconditionedVariable]].center(printSizeDict[unconditionedVariable], ' ')
                                       for unconditionedVariable in self.__unconditionedVariables])
         if len(self.__conditionedVariables) > 0:
-            varLine += " | " + " | ".join([str(conditionedVariable)[:printSizeDict[conditionedVariable]].center(printSizeDict[conditionedVariable], ' ') 
+            varLine += " | " + " | ".join([str(conditionedVariable)[:printSizeDict[conditionedVariable]].center(printSizeDict[conditionedVariable], ' ')
                                                 for conditionedVariable in self.__conditionedVariables])
         varLine += " | " + "Prob:".center(7, " ") + " |"
 
@@ -538,7 +538,7 @@ class Factor(object):
 
         # Make sure that newVariableDomainsDict has smaller or equal
         # domain to factor.variableDomainsDict for all variables that
-        # this factor contains.    
+        # this factor contains.
         oldVariableDomains = self.variableDomainsDict()
         for (variable, domain) in newVariableDomainsDict.items():
             if variable in self.variablesSet():
@@ -546,7 +546,7 @@ class Factor(object):
                 for value in domain:
                     if value not in oldVariableDomain:
                         raise ValueError, ("newVariableDomainsDict is not a subset of factor.variableDomainsDict ",
-                                            "for variables contained in factor. " + "factor: " +  str(self) + 
+                                            "for variables contained in factor. " + "factor: " +  str(self) +
                                             " newVariableDomainsDict: " + str(newVariableDomainsDict) +
                                             " factor.variableDomainsDict: " + str(self.variableDomainsDict()) +
                                             " variable: " + str(variable) +
@@ -565,8 +565,8 @@ class Factor(object):
 def constructEmptyBayesNet(variableList, edgeTuplesList, variableDomainsDict):
     " More convenient constructor for Bayes nets "
     variablesSet = set(variableList)
-    inEdges  = defaultdict(set)   
-    outEdges = defaultdict(set)   
+    inEdges  = defaultdict(set)
+    outEdges = defaultdict(set)
     for (parent, child) in edgeTuplesList:
         # add the variables to the variables set
         inEdges[child].add(parent)
@@ -598,11 +598,11 @@ def fillTablesRandomly(bayesNet):
         bayesNet.setCPT(variable, CPT)
 
 def fillWithOneConditionedAssignmentRandomly(factor, unconditionedVariables, conditionedVariables, product, variableDomainsDict):
-    """ 
+    """
     Fills one subtable of a factor (given one conditional assignment).
     Makes this subtable sum to 1.
     """
-    cartesianProductOfUnConditionalAssignments = itertools.product(*[variableDomainsDict[unconditionedVariable] 
+    cartesianProductOfUnConditionalAssignments = itertools.product(*[variableDomainsDict[unconditionedVariable]
                                                                    for unconditionedVariable in unconditionedVariables])
     randomFills = [max(0.0, random.uniform(-0.4, 0.8)) for variableValue in cartesianProductOfUnConditionalAssignments]
     conditionalProbabilitySum = sum(randomFills)
@@ -612,7 +612,7 @@ def fillWithOneConditionedAssignmentRandomly(factor, unconditionedVariables, con
         randomFills[0] = 1.0
         conditionalProbabilitySum = sum(randomFills)
 
-    cartesianProductOfUnConditionalAssignments = itertools.product(*[variableDomainsDict[unconditionedVariable] 
+    cartesianProductOfUnConditionalAssignments = itertools.product(*[variableDomainsDict[unconditionedVariable]
                                                                    for unconditionedVariable in unconditionedVariables])
 
     for (randomFill, variableValue) in zip(randomFills, cartesianProductOfUnConditionalAssignments):
@@ -634,7 +634,7 @@ def constructAndFillFactorRandomly(unconditionedVariables, conditionedVariables,
 def reduceBayesNetVariablesWithEvidence(bayesNet, variablesToRemove,
                                         evidenceDict):
     """
-    Prunes the variables in variablesToRemove away from the Bayes net 
+    Prunes the variables in variablesToRemove away from the Bayes net
     and returns a new Bayes net without variablesToRemove
     """
     variablesToRemoveSet = set(variablesToRemove)
@@ -678,7 +678,7 @@ def reduceBayesNetVariablesWithEvidence(bayesNet, variablesToRemove,
                     len(unconditionedVariablesParents) == 0:
                 newCPT = Factor([variable], evidenceVariablesParents, \
                                 newVariableDomainsDict)
-                # only one entry in this CPT since all parents are 
+                # only one entry in this CPT since all parents are
                 # removed or evidence variables (and thus have one entry)
                 newCPT.setProbability(evidenceDict, 1.0)
 
@@ -715,7 +715,7 @@ def printStarterBayesNet():
     Pay close attention to how factors are created and modified.
     """
 
-    # This is the example V structured Bayes' net from the lecture 
+    # This is the example V structured Bayes' net from the lecture
     # on Bayes' nets independence.
     # Constructing Bayes' nets: variables list
     variableList = ['Raining', 'Ballgame', 'Traffic']
@@ -732,7 +732,7 @@ def printStarterBayesNet():
     # None of the conditional probability tables are assigned yet in our Bayes' net
     bayesNet = constructEmptyBayesNet(variableList, edgeTuplesList, variableDomainsDict)
 
-    # Create a factor for each CPT.  
+    # Create a factor for each CPT.
     # The first input is the list of unconditioned variables in your factor,
     # the second input is the list of conditioned variables in your factor,
     # and the third input is the dict of domains for your variables.
@@ -745,8 +745,8 @@ def printStarterBayesNet():
     print rainingCPT
 
     # We use assignmentDicts to set and get probability entries from Factors.
-    # An assignmentDict is a dict {variable : variableValue} of assignments 
-    # of variables to values (where the variableValue must be in 
+    # An assignmentDict is a dict {variable : variableValue} of assignments
+    # of variables to values (where the variableValue must be in
     # variableDomainsDict[variable]
 
     rainAssignmentDict = {'Raining' : 'yes'}
@@ -754,13 +754,13 @@ def printStarterBayesNet():
 
     rainAssignmentDict = {'Raining' : 'no'}
     rainingCPT.setProbability(rainAssignmentDict, 0.7)
-    
+
     print 'After setting entries: \n'
 
     print rainingCPT
 
-    # The traffic factor has two conditioned variables and one unconditioned 
-    # variable.  Each variable has a domain size of 2, so we have 
+    # The traffic factor has two conditioned variables and one unconditioned
+    # variable.  Each variable has a domain size of 2, so we have
     # 2^3 = 8 possible assignments (and thus 8 rows in our probability table).
 
     trafficCPT  = Factor(['Traffic'], ['Raining', 'Ballgame'], variableDomainsDict)
@@ -774,8 +774,8 @@ def printStarterBayesNet():
     Trb = {'Traffic' : 'yes', 'Raining' : 'no',  'Ballgame' : 'no' }
     trb = {'Traffic' : 'no',  'Raining' : 'no',  'Ballgame' : 'no' }
 
-    # For a CPT, we must have that the sum of the probability of all the 
-    # unconditionedVariables for a given assignment of conditioned 
+    # For a CPT, we must have that the sum of the probability of all the
+    # unconditionedVariables for a given assignment of conditioned
     # variables must sum to 1
     trafficCPT.setProbability(TRB, 0.95)
     trafficCPT.setProbability(tRB, 0.05)
@@ -802,9 +802,9 @@ def printStarterBayesNet():
 
     ballgameCPT = Factor(['Ballgame'], [], variableDomainsDict)
 
-    # Note that we can use assignmentDicts that contain assignments for 
+    # Note that we can use assignmentDicts that contain assignments for
     # more variables than a factor mentions.
-    # Here, we pass in an assignmentDict that has 3 variable assignments 
+    # Here, we pass in an assignmentDict that has 3 variable assignments
     # but ballgameCPT only contains variable Ballgame
     ballgameCPT.setProbability(TRB, 0.05)
 
