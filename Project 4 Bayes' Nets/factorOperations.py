@@ -234,4 +234,25 @@ def normalize(factor):
                             str(factor))
 
     "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+
+    unconditionedVariables = set()
+    conditionedVariables = set()
+    variableDomainsDict = factor.variableDomainsDict()
+    allVariables = factor.conditionedVariables().union(factor.unconditionedVariables())
+
+    for variable in variableDomainsDict:
+        if variable in allVariables:
+            if len(variableDomainsDict[variable]) == 1:
+                conditionedVariables.add(variable)
+            else:
+                unconditionedVariables.add(variable)
+
+    sumProb = sum([factor.getProbability(assignment) for assignment in factor.getAllPossibleAssignmentDicts()])
+    newFactor = Factor(unconditionedVariables, conditionedVariables, variableDomainsDict)
+
+    if sumProb == 0.0:
+        return None
+    for assignment in newFactor.getAllPossibleAssignmentDicts():
+        prob = factor.getProbability(assignment) / sumProb
+        newFactor.setProbability(assignment, prob)
+    return newFactor
