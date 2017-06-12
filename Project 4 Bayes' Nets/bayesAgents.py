@@ -245,7 +245,7 @@ def fillObsCPT(bayesNet, gameState):
                     if assignment[obsVar] == NO_OBS_VAL:
                         prob = 1
                     else:
-                        prob = 0              
+                        prob = 0
                 obsFactor.setProbability(assignment, prob)
             bayesNet.setCPT(obsVar, obsFactor)
 
@@ -266,8 +266,14 @@ def getMostLikelyFoodHousePosition(evidence, bayesNet, eliminationOrder):
     (This should be a very short method.)
     """
     "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
 
+    factor = inference.inferenceByVariableElimination(bayesNet, FOOD_HOUSE_VAR, evidence, eliminationOrder)
+    bestFoodProbility = 0.0
+    for assignment in factor.getAllPossibleAssignmentDicts():
+        if factor.getProbability(assignment) > bestFoodProbility:
+            bestFoodProbility = factor.getProbability(assignment)
+            bestAssignment = assignment
+    return bestAssignment
 
 class BayesAgent(game.Agent):
 
@@ -368,8 +374,15 @@ class VPIAgent(BayesAgent):
         rightExpectedValue = 0
 
         "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
+        factor = inference.inferenceByVariableElimination(self.bayesNet, [HOUSE_VARS], evidence, eliminationOrder)
 
+        for assignment in factor.getAllPossibleAssignmentDicts():
+            if assignment[FOOD_HOUSE_VAR] == TOP_LEFT_VAL and assignment[GHOST_HOUSE_VAR] == TOP_RIGHT_VAL:
+                probFoodLeft = factor.getProbability(assignment)
+            if assignment[FOOD_HOUSE_VAR] == TOP_RIGHT_VAL and assignment[GHOST_HOUSE_VAR] == TOP_LEFT_VAL:
+                probFoodRight = factor.getProbability(assignment)
+        leftExpectedValue =  WON_GAME_REWARD * probFoodLeft + GHOST_COLLISION_REWARD * probFoodRight
+        rightExpectedValue =  WON_GAME_REWARD * probFoodRight + GHOST_COLLISION_REWARD * probFoodLeft
         return leftExpectedValue, rightExpectedValue
 
     def getExplorationProbsAndOutcomes(self, evidence):
@@ -432,10 +445,10 @@ class VPIAgent(BayesAgent):
         """
 
         expectedValue = 0
-
         "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
-
+        for prob, explorationEvidence in self.getExplorationProbsAndOutcomes(evidence):
+            maxActionValue = max(self.computeEnterValues(explorationEvidence, enterEliminationOrder))
+            expectedValue += prob * maxActionValue
         return expectedValue
 
     def getAction(self, gameState):
