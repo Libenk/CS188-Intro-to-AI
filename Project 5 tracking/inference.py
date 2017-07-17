@@ -111,9 +111,6 @@ class DiscreteDistribution(dict):
             if sampleValue < sumValue:
                 return key
 
-
-
-
 class InferenceModule:
     """
     An inference module tracks a belief distribution over a ghost's location.
@@ -180,7 +177,15 @@ class InferenceModule:
         """
         Return the probability P(noisyDistance | pacmanPosition, ghostPosition).
         """
-        "*** YOUR CODE HERE ***"
+        if ghostPosition == jailPosition:
+            return 1.0 if noisyDistance is None else 0.0
+        elif not noisyDistance:
+            return 0.0
+        else:
+            trueDistance = manhattanDistance(ghostPosition, pacmanPosition)
+            return busters.getObservationProbability(noisyDistance, trueDistance)
+
+
 
     def setGhostPosition(self, gameState, ghostPosition, index):
         """
