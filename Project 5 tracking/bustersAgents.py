@@ -4,7 +4,7 @@
 # educational purposes provided that (1) you do not distribute or publish
 # solutions, (2) you retain this notice, and (3) you provide clear
 # attribution to UC Berkeley, including a link to http://ai.berkeley.edu.
-# 
+#
 # Attribution Information: The Pacman AI projects were developed at UC Berkeley.
 # The core projects and autograders were primarily created by John DeNero
 # (denero@cs.berkeley.edu) and Dan Klein (klein@cs.berkeley.edu).
@@ -135,9 +135,20 @@ class GreedyBustersAgent(BustersAgent):
         Pacman closest to the closest ghost (according to mazeDistance!).
         """
         pacmanPosition = gameState.getPacmanPosition()
-        legal = [a for a in gameState.getLegalPacmanActions()]
+        legalActions = [a for a in gameState.getLegalPacmanActions()]
         livingGhosts = gameState.getLivingGhosts()
         livingGhostPositionDistributions = \
             [beliefs for i, beliefs in enumerate(self.ghostBeliefs)
              if livingGhosts[i+1]]
         "*** YOUR CODE HERE ***"
+        ghostPositionsWithMaxProb = [prob.argMax() for prob in livingGhostPositionDistributions]
+        ghostPositionClosest = min(ghostPositionsWithMaxProb, key = lambda pos : self.distancer.getDistance(pos, pacmanPosition))
+        bestAction, minDistance = None, 9999999999999
+        for action in legalActions:
+            successorPosition = Actions.getSuccessor(pacmanPosition, action)
+            newDistance = self.distancer.getDistance(ghostPositionClosest, successorPosition)
+            if newDistance < minDistance:
+                minDistance = newDistance
+                bestAction = action
+        assert bestAction is not None, 'Action should not be None' 
+        return bestAction
