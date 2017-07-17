@@ -81,6 +81,7 @@ class DiscreteDistribution(dict):
                 self[key] =  float(self[key]) / sumValue
 
 
+
     def sample(self):
         """
         Draw a random sample from the distribution and return the key, weighted
@@ -179,8 +180,8 @@ class InferenceModule:
         """
         if ghostPosition == jailPosition:
             return 1.0 if noisyDistance is None else 0.0
-        elif not noisyDistance:
-            return 0.0
+        elif noisyDistance is None:
+            return 1.0 if ghostPosition == jailPosition else 0.0
         else:
             trueDistance = manhattanDistance(ghostPosition, pacmanPosition)
             return busters.getObservationProbability(noisyDistance, trueDistance)
@@ -293,6 +294,11 @@ class ExactInference(InferenceModule):
         position is known.
         """
         "*** YOUR CODE HERE ***"
+        self.beliefs.normalize()
+        pacmanPosition, jailPosition = gameState.getPacmanPosition(), self.getJailPosition()
+        for ghostPosition in self.allPositions:
+            likelihoodProb = self.getObservationProb(observation, pacmanPosition, ghostPosition, jailPosition)
+            self.beliefs[ghostPosition] *= likelihoodProb
         self.beliefs.normalize()
 
     def elapseTime(self, gameState):
