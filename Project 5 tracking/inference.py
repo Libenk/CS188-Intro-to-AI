@@ -348,6 +348,10 @@ class ParticleFilter(InferenceModule):
         """
         self.particles = []
         "*** YOUR CODE HERE ***"
+        numParticlesInEachPosition = self.numParticles / len(self.legalPositions)
+        for pos in self.legalPositions:
+            self.particles += [pos] * numParticlesInEachPosition
+        return self.particles
 
     def observeUpdate(self, observation, gameState):
         """
@@ -362,6 +366,15 @@ class ParticleFilter(InferenceModule):
         the DiscreteDistribution may be useful.
         """
         "*** YOUR CODE HERE ***"
+        pacmanPosition, jailPosition = gameState.getPacmanPosition(), self.getJailPosition()
+        beliefDist = self.getBeliefDistribution()
+        for ghostPosition in self.allPositions:
+            likelihoodProb = self.getObservationProb(observation, pacmanPosition, ghostPosition, jailPosition)
+            beliefDist[ghostPosition] *= likelihoodProb
+        if beliefDist.total() == 0:
+            self.particles = self.initializeUniformly(gameState)
+        else:
+            self.particles = [beliefDist.sample() for _ in range(self.numParticles)]
 
     def elapseTime(self, gameState):
         """
@@ -377,6 +390,11 @@ class ParticleFilter(InferenceModule):
         essentially converts a list of particles into a belief distribution.
         """
         "*** YOUR CODE HERE ***"
+        belief = DiscreteDistribution()
+        for pos in self.particles:
+            belief[pos] += 1
+        belief.normalize()
+        return belief
 
 
 class JointParticleFilter(ParticleFilter):
