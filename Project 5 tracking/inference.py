@@ -348,10 +348,11 @@ class ParticleFilter(InferenceModule):
         """
         self.particles = []
         "*** YOUR CODE HERE ***"
-        numParticlesInEachPosition = self.numParticles / len(self.legalPositions)
-        for pos in self.legalPositions:
-            self.particles += [pos] * numParticlesInEachPosition
+        for _ in range(self.numParticles):
+            self.particles.append(random.choice(self.legalPositions))
         return self.particles
+
+
 
     def observeUpdate(self, observation, gameState):
         """
@@ -430,9 +431,8 @@ class JointParticleFilter(ParticleFilter):
         self.particles = []
         "*** YOUR CODE HERE ***"
         possibleGhostStates = list(itertools.product(self.legalPositions, repeat = self.numGhosts))
-        numParticlesInEachState = self.numParticles / len(possibleGhostStates)
-        for state in possibleGhostStates:
-            self.particles += [state] * numParticlesInEachState
+        for _ in range(self.numParticles):
+            self.particles.append(random.choice(possibleGhostStates))
         return self.particles
 
 
@@ -478,6 +478,7 @@ class JointParticleFilter(ParticleFilter):
                ghostPosition = state[i]
                likelihoodProb = self.getObservationProb(noisyDistance, pacmanPosition, ghostPosition, jailPosition)
                beliefDist[state] *= likelihoodProb
+
         if beliefDist.total() == 0:
             self.particles = self.initializeUniformly(gameState)
         else:
@@ -495,11 +496,13 @@ class JointParticleFilter(ParticleFilter):
 
             # now loop through and update each entry in newParticle...
             "*** YOUR CODE HERE ***"
-
+            for i in range(self.numGhosts):
+                prevGhostPositions = newParticle
+                newPosDist = self.getPositionDistribution(gameState, prevGhostPositions, i, self.ghostAgents[i])
+                newParticle[i] = newPosDist.sample()
             """*** END YOUR CODE HERE ***"""
             newParticles.append(tuple(newParticle))
         self.particles = newParticles
-
 
 # One JointInference module is shared globally across instances of MarginalInference
 jointInference = JointParticleFilter()
