@@ -430,6 +430,12 @@ class JointParticleFilter(ParticleFilter):
         self.particles = []
         "*** YOUR CODE HERE ***"
 
+        possibleGhostStates = list(itertools.product(self.legalPositions, self.legalPositions))
+        numParticlesInEachState = self.numParticles / len(possibleGhostStates)
+        for state in possibleGhostStates:
+            self.particles += [state] * numParticlesInEachState
+
+
     def addGhostAgent(self, agent):
         """
         Each ghost agent is registered separately and stored (in case they are
