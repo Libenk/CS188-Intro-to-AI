@@ -4,6 +4,8 @@ This is a repository of self learning Berkley CS188 Course
 
 Here are some demos of the Pacman Game Project results:
 
+## QLearning
+
 ### Reflex Pacman
 
 ![](http://imgur.com/hp754IO.gif)
@@ -29,3 +31,14 @@ Here are some demos of the Pacman Game Project results:
 #### After learning
 
 ![](http://i.imgur.com/0rMuVj5.gif)
+
+## Hidden Markov Model (HMM)
+
+### Ghost Buster in Open Hunt
+
+![](http://i.imgur.com/SpEtRj6.gif)
+
+### Ghost Buster in Big Hunt
+
+![](http://i.imgur.com/O1d87rG.gif)
+
