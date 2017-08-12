@@ -4,7 +4,7 @@
 # educational purposes provided that (1) you do not distribute or publish
 # solutions, (2) you retain this notice, and (3) you provide clear
 # attribution to UC Berkeley, including a link to http://ai.berkeley.edu.
-# 
+#
 # Attribution Information: The Pacman AI projects were developed at UC Berkeley.
 # The core projects and autograders were primarily created by John DeNero
 # (denero@cs.berkeley.edu) and Dan Klein (klein@cs.berkeley.edu).
@@ -213,7 +213,7 @@ def main():
         print("Train accuracy: %.1f%%" % (100.0 * model.accuracy(*train_data)))
     print("Validation accuracy: %.1f%%" % (100.0 * model.accuracy(*val_data)))
     print("Test accuracy: %.1f%%" % (100.0 * model.accuracy(*test_data)))
-    raw_input('Press enter to exit')
+    input('Press enter to exit')
 
 
 if __name__ == '__main__':

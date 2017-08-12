@@ -4,7 +4,7 @@
 # educational purposes provided that (1) you do not distribute or publish
 # solutions, (2) you retain this notice, and (3) you provide clear
 # attribution to UC Berkeley, including a link to http://ai.berkeley.edu.
-# 
+#
 # Attribution Information: The Pacman AI projects were developed at UC Berkeley.
 # The core projects and autograders were primarily created by John DeNero
 # (denero@cs.berkeley.edu) and Dan Klein (klein@cs.berkeley.edu).
@@ -74,13 +74,17 @@ class PerceptronClassifier(object):
         # DO NOT ZERO OUT YOUR WEIGHTS BEFORE STARTING TRAINING, OR
         # THE AUTOGRADER WILL LIKELY DEDUCT POINTS.
         for iteration in range(iterations):
-            print "Starting iteration ", iteration, "..."
+            print("Starting iteration ", iteration, "...")
             for i in range(len(input_train_data)):
                 # the callback plots the line in the Pacman Plot
                 if callback is not None: callback()
 
                 "*** YOUR CODE HERE ***"
-                util.raiseNotDefined()
+                predict = self.classify(input_train_data[i])
+                actual = label_train_data[i]
+                if predict != actual:
+                    self.weights[predict] -= input_train_data[i]
+                    self.weights[actual] += input_train_data[i]
 
     def classify(self, input_datum_or_data):
         """

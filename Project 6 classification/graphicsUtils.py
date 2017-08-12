@@ -4,7 +4,7 @@
 # educational purposes provided that (1) you do not distribute or publish
 # solutions, (2) you retain this notice, and (3) you provide clear
 # attribution to UC Berkeley, including a link to http://ai.berkeley.edu.
-# 
+#
 # Attribution Information: The Pacman AI projects were developed at UC Berkeley.
 # The core projects and autograders were primarily created by John DeNero
 # (denero@cs.berkeley.edu) and Dan Klein (klein@cs.berkeley.edu).
@@ -18,7 +18,7 @@ import random
 import string
 import time
 import types
-import Tkinter
+import tkinter
 import os.path
 
 _Windows = sys.platform == 'win32'  # True if on Win95/98/NT
@@ -148,8 +148,8 @@ def end_graphics():
             sleep(1)
             if _root_window != None:
                 _root_window.destroy()
-        except SystemExit, e:
-            print 'Ending graphics raised an exception:', e
+        except SystemExit(e):
+            print('Ending graphics raised an exception:', e)
     finally:
         _root_window = None
         _canvas = None
@@ -291,8 +291,8 @@ def _clear_keys(event=None):
     _keyswaiting = {}
     _got_release = None
 
-def keys_pressed(d_o_e=Tkinter.tkinter.dooneevent,
-                 d_w=Tkinter.tkinter.DONT_WAIT):
+def keys_pressed(d_o_e=tkinter.Tk().tk.dooneevent,
+                 d_w=tkinter._tkinter.DONT_WAIT):
     d_o_e(d_w)
     if _got_release:
         d_o_e(d_w)
@@ -314,8 +314,8 @@ def wait_for_keys():
     return keys
 
 def remove_from_screen(x,
-                       d_o_e=Tkinter.tkinter.dooneevent,
-                       d_w=Tkinter.tkinter.DONT_WAIT):
+                       d_o_e=tkinter.Tk().tk.dooneevent,
+                       d_w=tkinter._tkinter.DONT_WAIT):
     _canvas.delete(x)
     d_o_e(d_w)
 
@@ -326,8 +326,8 @@ def _adjust_coords(coord_list, x, y):
     return coord_list
 
 def move_to(object, x, y=None,
-            d_o_e=Tkinter.tkinter.dooneevent,
-            d_w=Tkinter.tkinter.DONT_WAIT):
+            d_o_e=tkinter.Tk().tk.dooneevent,
+            d_w=tkinter._tkinter.DONT_WAIT):
     if y is None:
         try: x, y = x
         except: raise  'incomprehensible coordinates'
@@ -348,11 +348,11 @@ def move_to(object, x, y=None,
     d_o_e(d_w)
 
 def move_by(object, x, y=None,
-            d_o_e=Tkinter.tkinter.dooneevent,
-            d_w=Tkinter.tkinter.DONT_WAIT, lift=False):
+            d_o_e=tkinter.Tk().tk.dooneevent,
+            d_w=tkinter._tkinter.DONT_WAIT, lift=False):
     if y is None:
         try: x, y = x
-        except: raise Exception, 'incomprehensible coordinates'
+        except: raise Exception('incomprehensible coordinates')
 
     horiz = True
     newCoords = []

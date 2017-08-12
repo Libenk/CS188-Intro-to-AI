@@ -4,7 +4,7 @@
 # educational purposes provided that (1) you do not distribute or publish
 # solutions, (2) you retain this notice, and (3) you provide clear
 # attribution to UC Berkeley, including a link to http://ai.berkeley.edu.
-# 
+#
 # Attribution Information: The Pacman AI projects were developed at UC Berkeley.
 # The core projects and autograders were primarily created by John DeNero
 # (denero@cs.berkeley.edu) and Dan Klein (klein@cs.berkeley.edu).
@@ -25,7 +25,7 @@ try:
     import matplotlib.pyplot as plt
     matplotlibMissing = False
 except ImportError:
-    print 'plotUtil.plotRegression: Sorry, could not import matplotlib'
+    print ('plotUtil.plotRegression: Sorry, could not import matplotlib')
     matplotlibMissing = True
 
 
@@ -82,10 +82,10 @@ def plotRegression(x, y, weights=None, figureIdx=1, blocking=False, showLegend='
 
     plt.figure(figureIdx)
     plt.figure(figureIdx).clf()
-    
+
     if np.array(x).size == 0:
         return
-    
+
     if isinstance(x[0], np.ndarray):
         # Scrape the first element of each data point
         x = [data[0] for data in x]
@@ -273,22 +273,22 @@ def plotClassification2D(data, labels, weights=None, blocking=False, showLegend=
 
 def lineBoxIntersection(w1, w2, b, xmin, ymin, xmax, ymax):
     """
-    Figure out where line (w1*x+w2*y+b=0) intersections the 
+    Figure out where line (w1*x+w2*y+b=0) intersections the
     box (xmin, ymin) -> (xmax, ymax)
     """
-        
+
     point1 = None
     point2 = None
     if w2 == 0:
         x1a = -(w2*ymin + b)*1.0/w1
         x1b = -(w2*ymax + b)*1.0/w1
-    
+
         point1 = (x1a, ymin)
         point2 = (x1b, ymax)
     else:
         x2a = -(w1*xmin + b)*1.0/w2
         x2b = -(w1*xmax + b)*1.0/w2
-        
+
         if w1 == 0:
             point1 = (xmin, x2a)
             point2 = (xmax, x2b)
@@ -308,7 +308,7 @@ def lineBoxIntersection(w1, w2, b, xmin, ymin, xmax, ymax):
             else:
                 # Point 1 on left edge
                 point1 = (xmin, x2a)
-                
+
             # Point 2
             if point1 is not None:
                 if x2b < ymin:
@@ -319,7 +319,7 @@ def lineBoxIntersection(w1, w2, b, xmin, ymin, xmax, ymax):
                     point2 = (x1b, ymax)
                 else:
                     # Point 2 on right edge
-                    point2 = (xmax, x2b)                                                
+                    point2 = (xmax, x2b)
     return (point1, point2)
 
 
@@ -328,20 +328,20 @@ if __name__ == '__main__':
     Demo code
     """
     # Regression
- 
+
     x = np.random.normal(0,1,10)
     plotRegression(x, x**3, blocking=True)
     # Blocked until the window is closed
- 
+
     for i in range(8):
         plotRegression(x, x**3, [i])
- 
+
     # With offset
     plotRegression(x, x**3, [8, -10], blocking=True)
     # Blocked until the window is closed
- 
+
     # Classification 2D
- 
+
     # Generate labeled points
     means = ((4,4), (-4,4), (0,-4))
     labelNames= ('A','B','C')
@@ -352,18 +352,18 @@ if __name__ == '__main__':
         labels.append(labelNames[labelIndex])
         mean = np.array(means[labelIndex])
         data.append(np.random.normal(mean,1,mean.shape))
- 
+
     plotClassification2D(data, labels, blocking=True)
     # Blocked until the window is closed
- 
+
     for i in range(8):
         plotClassification2D(data, labels, [4,i])
- 
- 
+
+
     # With offset and horizontal separator
     plotClassification2D(data, labels, [0, 1, -3], blocking=True)
     # Blocked until the window is closed
-    
+
     # Classification 1D
 
     # Generate labeled points
@@ -387,7 +387,3 @@ if __name__ == '__main__':
     # With offset and horizontal separator
     plotLogisticRegression1D(data, labels, [-3, -6], blocking=True)
     # Blocked until the window is closed
-    
-    
-
-
