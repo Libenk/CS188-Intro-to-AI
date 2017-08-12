@@ -88,13 +88,13 @@ class PacmanPlot(PacmanGraphics):
 #         row = ((self.width-1)/2)*[' '] + ['%'] + ((self.width-1)/2)*[' ']
 #         boardText = ((self.height-1)/2)*[row] + [fullRow] + ((self.height-1)/2)*[row]
 
-        numSpaces = self.width-1
-        numSpacesLeft = self.xShift
-        numSpacesRight = numSpaces-numSpacesLeft
+        numSpaces = int(self.width-1)
+        numSpacesLeft = int(self.xShift)
+        numSpacesRight = int(numSpaces-numSpacesLeft)
 
-        numRows = self.height
-        numRowsBelow = self.yShift
-        numRowsAbove = numRows-1-numRowsBelow
+        numRows = int(self.height)
+        numRowsBelow = int(self.yShift)
+        numRowsAbove = int(numRows-1-numRowsBelow)
 
 
         fullRow = ['%']*self.width
