@@ -88,7 +88,7 @@ class PerceptronClassifier(object):
 
     def classify(self, input_datum_or_data):
         """
-        Classifies a datum or each datum in a list of data.
+        Classifies a datum or each datum in a list of data. 
 
         Args:
             input_datum_or_data: a single util.Counter or a list of them, where
