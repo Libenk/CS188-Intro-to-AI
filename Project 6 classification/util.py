@@ -17,6 +17,7 @@ import inspect
 import heapq, random
 from io import StringIO
 import numpy as np
+import functools
 
 
 class FixedRandom:
@@ -300,9 +301,9 @@ class Counter(dict):
         >>> a.sortedKeys()
         ['second', 'third', 'first']
         """
-        sortedItems = self.items()
+        sortedItems = list(self.items())
         compare = lambda x, y:  sign(y[1] - x[1])
-        sortedItems.sort(cmp=compare)
+        sortedItems = sorted(sortedItems, key=functools.cmp_to_key(compare))
         return [x[0] for x in sortedItems]
 
     def totalCount(self):
