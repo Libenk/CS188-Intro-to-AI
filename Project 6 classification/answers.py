@@ -22,7 +22,7 @@ def q3():
     return 'a'
 
 def q7():
-    "*** YOUR CODE HERE ***"
+    return 'both'
 
 def q10():
     """
