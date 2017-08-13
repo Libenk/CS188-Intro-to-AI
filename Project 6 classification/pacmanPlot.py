@@ -4,7 +4,7 @@
 # educational purposes provided that (1) you do not distribute or publish
 # solutions, (2) you retain this notice, and (3) you provide clear
 # attribution to UC Berkeley, including a link to http://ai.berkeley.edu.
-#
+# 
 # Attribution Information: The Pacman AI projects were developed at UC Berkeley.
 # The core projects and autograders were primarily created by John DeNero
 # (denero@cs.berkeley.edu) and Dan Klein (klein@cs.berkeley.edu).
@@ -21,7 +21,7 @@ from game import AgentState
 from game import Configuration
 from game import Directions
 from layout import Layout
-from tkinter import mainloop
+from Tkinter import mainloop
 import math
 import numpy as np
 import time
@@ -88,13 +88,13 @@ class PacmanPlot(PacmanGraphics):
 #         row = ((self.width-1)/2)*[' '] + ['%'] + ((self.width-1)/2)*[' ']
 #         boardText = ((self.height-1)/2)*[row] + [fullRow] + ((self.height-1)/2)*[row]
 
-        numSpaces = int(self.width-1)
-        numSpacesLeft = int(self.xShift)
-        numSpacesRight = int(numSpaces-numSpacesLeft)
+        numSpaces = self.width-1
+        numSpacesLeft = self.xShift
+        numSpacesRight = numSpaces-numSpacesLeft
 
-        numRows = int(self.height)
-        numRowsBelow = int(self.yShift)
-        numRowsAbove = int(numRows-1-numRowsBelow)
+        numRows = self.height
+        numRowsBelow = self.yShift
+        numRowsAbove = numRows-1-numRowsBelow
 
 
         fullRow = ['%']*self.width

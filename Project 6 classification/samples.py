@@ -4,7 +4,7 @@
 # educational purposes provided that (1) you do not distribute or publish
 # solutions, (2) you retain this notice, and (3) you provide clear
 # attribution to UC Berkeley, including a link to http://ai.berkeley.edu.
-#
+# 
 # Attribution Information: The Pacman AI projects were developed at UC Berkeley.
 # The core projects and autograders were primarily created by John DeNero
 # (denero@cs.berkeley.edu) and Dan Klein (klein@cs.berkeley.edu).
@@ -109,7 +109,7 @@ def loadDataFile(filename, n, width, height):
             data.append(list(fin.pop()))
         if len(data[0]) < width - 1:
             # we encountered end of file...
-            print ("Truncating at %d examples (maximum)" % i)
+            print "Truncating at %d examples (maximum)" % i
             break
         items.append(Datum(data, width, height))
     return items
@@ -142,7 +142,7 @@ def loadPacmanStatesFile(filename, n):
     f.close()
     return result
 
-import _pickle as cPickle
+import cPickle
 def loadPacmanData(filename, n):
     """
     Return game states from specified recorded games as data, and actions taken as labels

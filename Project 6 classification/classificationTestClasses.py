@@ -4,7 +4,7 @@
 # educational purposes provided that (1) you do not distribute or publish
 # solutions, (2) you retain this notice, and (3) you provide clear
 # attribution to UC Berkeley, including a link to http://ai.berkeley.edu.
-#
+# 
 # Attribution Information: The Pacman AI projects were developed at UC Berkeley.
 # The core projects and autograders were primarily created by John DeNero
 # (denero@cs.berkeley.edu) and Dan Klein (klein@cs.berkeley.edu).
@@ -107,8 +107,8 @@ class UpdatesEqualityTest(testClasses.TestCase):
         if len(self.messages) > len_messages:
             return updates, None, grads
         # Check for repeated variables
-        if len(set(list(zip(*updates))[0])) != len(updates):
-            self.addMessage('There are some repeated variables being updated: %r' % list(zip(*updates))[0])
+        if len(set(zip(*updates)[0])) != len(updates):
+            self.addMessage('There are some repeated variables being updated: %r' % zip(*updates)[0])
             return updates, None, grads
         update_values = [tfu.get_session().run(update, feed_dict=feed_dict) for update in updates]
         return updates, update_values, grads
@@ -121,7 +121,7 @@ class UpdatesEqualityTest(testClasses.TestCase):
         update_values = list(update_values)
         for gold_update_value in gold_update_values:
             for i, update_value in enumerate(update_values):
-                allclose = all([value.shape == gold_value.shape and np.allclose(value, gold_value) for (value, gold_value) in list(zip(update_value, gold_update_value))])
+                allclose = all([value.shape == gold_value.shape and np.allclose(value, gold_value) for (value, gold_value) in zip(update_value, gold_update_value)])
                 if allclose:
                     update_values.pop(i)
                     num_equal_updates += 1
@@ -136,7 +136,7 @@ class UpdatesEqualityTest(testClasses.TestCase):
         updates, update_values, grads = self.get_update_values(moduleDict)
         gold_update_values_file = np.load(solutionDict['update_values_fname'])
         gold_update_values = [gold_update_values_file['arr_%d' % i] for i in range(len(gold_update_values_file.files))]
-        gold_update_values = list(zip(gold_update_values[::2], gold_update_values[1::2]))
+        gold_update_values = zip(gold_update_values[::2], gold_update_values[1::2])
         correct = self.update_values_allclose(update_values, gold_update_values)
         if correct:
             total_points = self.max_points
@@ -249,10 +249,10 @@ class ParamValuesEqualityTest(testClasses.TestCase):
         init_param_values, model, dataset, losses = self.get_solved_model_and_dataset(moduleDict, init_param_values)
         param_values = model.get_param_values()
         gold_param_values = self.load_init_param_values(solutionDict['param_values_fname'])
-        correct_param_values = all([np.allclose(param_value, gold_param_value, atol=1e-07) for (param_value, gold_param_value) in list(zip(param_values, gold_param_values))])
+        correct_param_values = all([np.allclose(param_value, gold_param_value, atol=1e-07) for (param_value, gold_param_value) in zip(param_values, gold_param_values)])
         if self.check_losses:
             gold_losses = self.load_init_param_values(solutionDict['losses_fname'])
-            correct_losses = all([np.allclose(loss, gold_loss, atol=1e-07) for (loss, gold_loss) in list(zip(losses, gold_losses))])
+            correct_losses = all([np.allclose(loss, gold_loss, atol=1e-07) for (loss, gold_loss) in zip(losses, gold_losses)])
         else:
             correct_losses = True
         if correct_param_values and correct_losses:
@@ -394,7 +394,7 @@ class HyperParamEqualityTest(testClasses.TestCase):
 
         gold_param_values_file = np.load(solutionDict['param_values_fname'])
         gold_param_values = [gold_param_values_file['arr_%d' % i] for i in range(len(gold_param_values_file.files))]
-        correct = all([np.allclose(new_param_value, gold_param_value, atol=1e-07) for (new_param_value, gold_param_value) in list(zip(param_values, gold_param_values))])
+        correct = all([np.allclose(new_param_value, gold_param_value, atol=1e-07) for (new_param_value, gold_param_value) in zip(param_values, gold_param_values)])
         if correct:
             totalPoints = self.maxPoints
             return self.testPartial(grades, totalPoints, self.maxPoints)
@@ -437,7 +437,7 @@ class MultipleChoiceTest(testClasses.TestCase):
 
     def execute(self, grades, moduleDict, solutionDict):
         studentSolution = str(getattr(moduleDict['answers'], self.question)())
-        encryptedSolution = sha1(studentSolution.strip().lower().encode('utf-8')).hexdigest()
+        encryptedSolution = sha1(studentSolution.strip().lower()).hexdigest()
         if encryptedSolution == self.ans:
             return self.testPass(grades)
         else:
@@ -451,3 +451,4 @@ class MultipleChoiceTest(testClasses.TestCase):
         handle.write('# File intentionally blank.\n')
         handle.close()
         return True
+
