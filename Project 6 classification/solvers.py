@@ -112,12 +112,13 @@ class GradientDescentSolver(Solver):
         tfu.get_session().run([vel_var.initializer for vel_var in vel_vars])
         updates = []
         "*** YOUR CODE HERE ***"
+        print(vel_vars)
         for vel_var, param_var, grad_tensor in zip(vel_vars, param_vars, grad_tensors):
-            vel_var = self.momentum * vel_var - tf.scalar_mul(self.learning_rate, grad_tensor)
-            new_param_tensor = param_var - vel_var
+            vel_tensor = self.momentum * vel_var - tf.scalar_mul(self.learning_rate, grad_tensor)
+            new_param_tensor = param_var + vel_tensor
+            updates.append((vel_var, vel_tensor))
             updates.append((param_var, new_param_tensor))
 
-        util.raiseNotDefined()
         return updates
 
     def get_loss_tensor(self, prediction_tensor, target_ph, param_vars):
