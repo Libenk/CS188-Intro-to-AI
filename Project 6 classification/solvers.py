@@ -4,7 +4,7 @@
 # educational purposes provided that (1) you do not distribute or publish
 # solutions, (2) you retain this notice, and (3) you provide clear
 # attribution to UC Berkeley, including a link to http://ai.berkeley.edu.
-# 
+#
 # Attribution Information: The Pacman AI projects were developed at UC Berkeley.
 # The core projects and autograders were primarily created by John DeNero
 # (denero@cs.berkeley.edu) and Dan Klein (klein@cs.berkeley.edu).
@@ -82,8 +82,9 @@ class GradientDescentSolver(Solver):
         """
         grad_tensors = tf.gradients(loss_tensor, param_vars)
         updates = []
-        "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
+        for param_var, grad_tensor in zip(param_vars, grad_tensors):
+            new_param_tensor = param_var - tf.scalar_mul(self.learning_rate, grad_tensor)
+            updates.append((param_var, new_param_tensor))
         return updates
 
     def get_updates_with_momentum(self, loss_tensor, param_vars):
@@ -107,8 +108,11 @@ class GradientDescentSolver(Solver):
         vel_vars = [tf.Variable(np.zeros(param_var.get_shape(), dtype=np.float32)) for param_var in param_vars]
         tfu.get_session().run([vel_var.initializer for vel_var in vel_vars])
         updates = []
-        "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
+        for vel_var, param_var, grad_tensor in zip(vel_vars, param_vars, grad_tensors):
+            vel_tensor = self.momentum * vel_var - tf.scalar_mul(self.learning_rate, grad_tensor)
+            new_param_tensor = param_var + vel_tensor
+            updates.append((vel_var, vel_tensor))
+            updates.append((param_var, new_param_tensor))
         return updates
 
     def get_loss_tensor(self, prediction_tensor, target_ph, param_vars):
@@ -169,15 +173,19 @@ class GradientDescentSolver(Solver):
         train_data = [input_train_data, target_train_data]
         val_data = [input_val_data, target_val_data]
         # You may want to initialize some variables that are shared across iterations
-        "*** YOUR CODE HERE ***"
+
+        train_dict = dict(zip(placeholders, train_data))
+        val_dict = dict(zip(placeholders, val_data))
+
         loss_tensor = self.get_loss_tensor(model.prediction_tensor, target_ph, model.get_param_vars(regularizable=True))
         updates = self.get_updates(loss_tensor, model.get_param_vars(trainable=True))
         update_ops = [tf.assign(old_var, new_var_or_tensor) for (old_var, new_var_or_tensor) in updates]
         train_losses = []
         val_losses = []
         for iter_ in range(self.iterations):
-            "*** YOUR CODE HERE ***"
-            util.raiseNotDefined()
+
+            train_loss, _ = session.run([loss_tensor, update_ops], feed_dict = train_dict)
+            val_loss = session.run(loss_tensor, feed_dict = val_dict)
             # train_loss should be the loss of this iteration using all of the training data
             # val_loss should be the loss of this iteration using all of the validation data
             train_losses.append(train_loss)
@@ -266,15 +274,20 @@ class StochasticGradientDescentSolver(GradientDescentSolver):
         train_data = [input_train_data, target_train_data]
         val_data = [input_val_data, target_val_data]
         # You may want to initialize some variables that are shared across iterations
-        "*** YOUR CODE HERE ***"
+        train_gen = MinibatchIndefinitelyGenerator(train_data, 1, self.shuffle)
+        val_gen = MinibatchIndefinitelyGenerator(val_data, 1, self.shuffle)
+
         loss_tensor = self.get_loss_tensor(model.prediction_tensor, target_ph, model.get_param_vars(regularizable=True))
         updates = self.get_updates(loss_tensor, model.get_param_vars(trainable=True))
         update_ops = [tf.assign(old_var, new_var_or_tensor) for (old_var, new_var_or_tensor) in updates]
         train_losses = []
         val_losses = []
         for iter_ in range(self.iterations):
-            "*** YOUR CODE HERE ***"
-            util.raiseNotDefined()
+
+            train_dict = dict(zip(placeholders, train_gen.next()))
+            val_dict = dict(zip(placeholders, val_gen.next()))
+            train_loss, _ = session.run([loss_tensor, update_ops], feed_dict = train_dict)
+            val_loss = session.run(loss_tensor, feed_dict = val_dict)
             # train_loss should be the loss of this iteration using only the training data that was used for the updates
             # val_loss should be the loss of this iteration using the same amount of data used for the updates, but using the validation data instead
             train_losses.append(train_loss)
@@ -355,15 +368,21 @@ class MinibatchStochasticGradientDescentSolver(GradientDescentSolver):
         train_data = [input_train_data, target_train_data]
         val_data = [input_val_data, target_val_data]
         # You may want to initialize some variables that are shared across iterations
-        "*** YOUR CODE HERE ***"
+        train_gen = MinibatchIndefinitelyGenerator(train_data, self.batch_size, self.shuffle)
+        val_gen = MinibatchIndefinitelyGenerator(val_data, self.batch_size, self.shuffle)
+
+
         loss_tensor = self.get_loss_tensor(model.prediction_tensor, target_ph, model.get_param_vars(regularizable=True))
         updates = self.get_updates(loss_tensor, model.get_param_vars(trainable=True))
         update_ops = [tf.assign(old_var, new_var_or_tensor) for (old_var, new_var_or_tensor) in updates]
         train_losses = []
         val_losses = []
         for iter_ in range(self.iterations):
-            "*** YOUR CODE HERE ***"
-            util.raiseNotDefined()
+
+            train_dict = dict(zip(placeholders, train_gen.next()))
+            val_dict = dict(zip(placeholders, val_gen.next()))
+            train_loss, _ = session.run([loss_tensor, update_ops], feed_dict = train_dict)
+            val_loss = session.run(loss_tensor, feed_dict = val_dict)
             # train_loss should be the loss of this iteration using only the training data that was used for the updates
             # val_loss should be the loss of this iteration using the same amount of data used for the updates, but using the validation data instead
             train_losses.append(train_loss)
