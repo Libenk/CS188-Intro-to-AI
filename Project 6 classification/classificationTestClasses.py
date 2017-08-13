@@ -107,14 +107,15 @@ class UpdatesEqualityTest(testClasses.TestCase):
         if len(self.messages) > len_messages:
             return updates, None, grads
         # Check for repeated variables
-        if len(set(zip(*updates)[0])) != len(updates):
+        if len(set(list(zip(*updates))[0])) != len(updates):
             self.addMessage('There are some repeated variables being updated: %r' % zip(*updates)[0])
             return updates, None, grads
         update_values = [tfu.get_session().run(update, feed_dict=feed_dict) for update in updates]
         return updates, update_values, grads
 
     def update_values_allclose(self, update_values, gold_update_values):
-        if len(update_values) != len(gold_update_values):
+        gold_update_values = list(gold_update_values)
+        if len(list(update_values)) != len(gold_update_values):
             self.addMessage('Expecting %d update tuples, but %d were given' % (len(gold_update_values), len(update_values)))
             return False
         num_equal_updates = 0
