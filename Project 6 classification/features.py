@@ -4,7 +4,7 @@
 # educational purposes provided that (1) you do not distribute or publish
 # solutions, (2) you retain this notice, and (3) you provide clear
 # attribution to UC Berkeley, including a link to http://ai.berkeley.edu.
-# 
+#
 # Attribution Information: The Pacman AI projects were developed at UC Berkeley.
 # The core projects and autograders were primarily created by John DeNero
 # (denero@cs.berkeley.edu) and Dan Klein (klein@cs.berkeley.edu).
@@ -15,6 +15,7 @@
 import numpy as np
 import util
 import samples
+import random
 
 DIGIT_DATUM_WIDTH=28
 DIGIT_DATUM_HEIGHT=28
@@ -52,7 +53,57 @@ def enhancedFeatureExtractor(datum):
     features = basicFeatureExtractor(datum)
 
     "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+
+    row_num, col_num = len(datum), len(datum[0])
+    def find_neighbors(seed):
+        neighbors = list()
+        row, col = seed[0], seed[1]
+        if row - 1 >= 0:
+            neighbors.append((row - 1, col, 0))
+        if row + 1 <= row_num - 1:
+            neighbors.append((row + 1, col, 0))
+        if col - 1 >= 0:
+            neighbors.append((row, col - 1, 0))
+        if col + 1 <= col_num - 1:
+            neighbors.append((row, col + 1, 0))
+        return neighbors
+
+    def dfs(datum):
+        pool = set()
+        for row in range(row_num):
+            for col in range(col_num):
+                pool.add((row, col, 0))
+        num_of_blocks = 0
+        while len(pool) > 0:
+            seed = random.choice(tuple(pool))
+            fringe = set()
+            if datum[seed] == 0:
+                judge = lambda pos: datum[pos] == 0
+            else:
+                judge = lambda pos: datum[pos] > 0
+            dfs_helper(seed, fringe, pool, judge)
+            num_of_blocks += 1
+        return num_of_blocks
+
+
+    def dfs_helper(seed, fringe, pool, judge):
+
+        if seed not in fringe and seed in pool:
+            fringe.add(seed)
+        else:
+            return
+        for neighbor in filter(judge, find_neighbors(seed)):
+            dfs_helper(neighbor, fringe, pool, judge)
+        fringe.remove(seed)
+        pool.remove(seed)
+        return
+
+    num_of_blocks = dfs(datum)
+    new_features = [0] * 3
+    for index in range(3):
+        new_features[index] = num_of_blocks % 2
+        num_of_blocks //= 2
+    features = np.append(features, new_features)
 
     return features
 
@@ -81,15 +132,15 @@ def analysis(model, trainData, trainLabels, trainPredictions, valData, valLabels
 
     # Put any code here...
     # Example of use:
-    # for i in range(len(trainPredictions)):
-    #     prediction = trainPredictions[i]
-    #     truth = trainLabels[i]
-    #     if (prediction != truth):
-    #         print "==================================="
-    #         print "Mistake on example %d" % i
-    #         print "Predicted %d; truth is %d" % (prediction, truth)
-    #         print "Image: "
-    #         print_digit(trainData[i,:])
+    '''for i in range(len(trainPredictions)):
+        prediction = trainPredictions[i]
+        truth = trainLabels[i]
+        if (prediction != truth):
+            print "==================================="
+            print "Mistake on example %d" % i
+            print "Predicted %d; truth is %d" % (prediction, truth)
+            print "Image: "
+            print_digit(trainData[i,:])'''
 
 
 ## =====================
@@ -97,7 +148,7 @@ def analysis(model, trainData, trainLabels, trainPredictions, valData, valLabels
 ## =====================
 
 def print_features(features):
-    str = ''
+    #str = ''
     width = DIGIT_DATUM_WIDTH
     height = DIGIT_DATUM_HEIGHT
     for i in range(width):
