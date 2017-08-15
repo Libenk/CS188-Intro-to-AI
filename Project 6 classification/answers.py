@@ -36,7 +36,8 @@ def q10():
     iterations. You should achieve at least a 97% accuracy on the MNIST test set.
     """
     hyperparams = dict()
-    "*** YOUR CODE HERE ***"
+    hyperparams['learning_rate'] = 0.001
+    hyperparams['momentum'] = 0.99
     # filter out any item in the dict that is not the learning rate nor momentum
     allowed_hyperparams = ['learning_rate', 'momentum']
     hyperparams = dict([(k, v) for (k, v) in hyperparams.items() if k in allowed_hyperparams])
